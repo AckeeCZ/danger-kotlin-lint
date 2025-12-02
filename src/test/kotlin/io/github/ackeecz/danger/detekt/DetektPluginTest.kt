@@ -12,7 +12,9 @@ internal class DetektPluginTest : FunSpec({
         val context = FakeDangerContext()
         DetektPlugin.context = context
 
-        DetektPlugin.parseAndReport(loadFile("detekt_result_two_files.xml"))
+        DetektPlugin.parseAndReport(
+            loadFile("detekt_result_two_files.xml"),
+        )
 
         context.warnings shouldHaveSize 6
     }
@@ -33,7 +35,9 @@ internal class DetektPluginTest : FunSpec({
         val context = FakeDangerContext()
         DetektPlugin.context = context
 
-        DetektPlugin.parseAndReport(loadFile("detekt_result_single_file.xml"))
+        DetektPlugin.parseAndReport(
+            loadFile("detekt_result_single_file.xml")
+        )
 
         context.warnings shouldHaveSize 2
     }
@@ -42,7 +46,9 @@ internal class DetektPluginTest : FunSpec({
         val context = FakeDangerContext()
         DetektPlugin.context = context
 
-        DetektPlugin.parseAndReport(loadFile("detekt_result_no_files.xml"))
+        DetektPlugin.parseAndReport(
+            loadFile("detekt_result_no_files.xml")
+        )
 
         context.warnings.shouldBeEmpty()
     }
@@ -51,7 +57,9 @@ internal class DetektPluginTest : FunSpec({
         val context = FakeDangerContext()
         DetektPlugin.context = context
 
-        DetektPlugin.parseAndReport(loadFile("detekt_result_single_file.xml"))
+        DetektPlugin.parseAndReport(
+            loadFile("detekt_result_single_file.xml"),
+        )
 
         context.warnings.first().file shouldBe "features/recipelist/src/main/java/cz/ackee/sample/recipelist/presentation/RecipeListFragment.kt"
     }
