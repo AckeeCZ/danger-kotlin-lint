@@ -1,0 +1,18 @@
+name: Setup
+description: Action that performs common setup tasks like setting up Java
+
+inputs:
+  github-token:
+    description: "GitHub token for authenticated API calls"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'jetbrains'
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
