@@ -2,20 +2,20 @@ package io.github.ackeecz.danger.detekt
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.fasterxml.jackson.annotation.JsonRootName
 import systems.danger.kotlin.sdk.DangerPlugin
+import tools.jackson.dataformat.xml.XmlMapper
+import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.FileInputStream
 
 /**
  * Plugin for a danger-kotlin processing outputs of detekt tool.
  */
-object DetektPlugin : DangerPlugin() {
+public object DetektPlugin : DangerPlugin() {
 
-    override val id = "danger-kotlin-detekt"
+    public override val id: String = "danger-kotlin-detekt"
 
     /**
      * Parse XML output of detekt and report inline comment
@@ -23,7 +23,7 @@ object DetektPlugin : DangerPlugin() {
      *
      * @param reportFiles files representing detekt XML output
      */
-    fun parseAndReport(vararg reportFiles: File) {
+    public fun parseAndReport(vararg reportFiles: File) {
         val mapper = XmlMapper()
         reportFiles.forEach { file ->
             FileInputStream(file).use { fileInputStream ->
@@ -62,7 +62,7 @@ object DetektPlugin : DangerPlugin() {
     }
 }
 
-@JacksonXmlRootElement(namespace = "checkstyle")
+@JsonRootName(value = "checkstyle")
 @JsonIgnoreProperties(ignoreUnknown = true)
 internal data class DetektReport(
     @field:JsonProperty("file")

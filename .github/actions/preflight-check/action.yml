@@ -1,0 +1,17 @@
+name: Preflight check
+description: Action that contains basic checks like running Detekt or tests that are common to multiple workflows
+
+runs:
+  using: "composite"
+  steps:
+    - name: Detekt
+      shell: bash
+      run: ./gradlew detekt
+
+    - name: Assemble
+      shell: bash
+      run: ./gradlew assemble
+
+    - name: Test
+      shell: bash
+      run: ./gradlew test

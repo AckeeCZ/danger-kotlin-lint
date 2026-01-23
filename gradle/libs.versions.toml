@@ -1,0 +1,38 @@
+[versions]
+
+ackee-detekt-config = "1.0.1"
+danger-kotlin-sdk = "1.2"
+detekt = "1.23.8"
+dokka = "2.1.0"
+jackson = "3.0.3"
+kotest = "6.0.7"
+kotlin = "2.2.21"
+mavenPublish = "0.35.0"
+
+[libraries]
+ackee-detekt-config-core = { module = "io.github.ackeecz:detekt-config-core", version.ref = "ackee-detekt-config" }
+
+danger-kotlin-sdk = { module = "systems.danger:danger-kotlin-sdk", version.ref = "danger-kotlin-sdk" }
+
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
+jackson-kotlinModule = { module = "tools.jackson.module:jackson-module-kotlin",  version.ref = "jackson" }
+jackson-xml = { module = "tools.jackson.dataformat:jackson-dataformat-xml",  version.ref = "jackson" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+
+# Build-logic dependencies
+detekt-gradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+mavenPublish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
+
+# Convention plugins
+ackeecz-danger-detekt-detekt = { id = "ackeecz.danger.detekt.detekt" }
+ackeecz-danger-detekt-publishing = { id = "ackeecz.danger.detekt.publishing" }

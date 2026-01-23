@@ -1,77 +1,62 @@
 package io.github.ackeecz.danger.detekt
 
-import com.google.common.truth.Truth
-import org.junit.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import java.io.File
 
-class DetektPluginTest {
+internal class DetektPluginTest : FunSpec({
 
-    @Test
-    fun `should process two files in report`() {
-        // before
+    test("should process two files in report") {
         val context = FakeDangerContext()
         DetektPlugin.context = context
-        // when
-        DetektPlugin.parseAndReport(File(ClassLoader.getSystemResource("detekt_result_two_files.xml").toURI()))
-        // then
-        Truth.assertThat(context.warnings)
-            .hasSize(6)
+
+        DetektPlugin.parseAndReport(loadFile("detekt_result_two_files.xml"))
+
+        context.warnings shouldHaveSize 6
     }
 
-    @Test
-    fun `should process two report files`() {
-        // before
+    test("should process two report files") {
         val context = FakeDangerContext()
         DetektPlugin.context = context
-        // when
+
         DetektPlugin.parseAndReport(
-            File(ClassLoader.getSystemResource("detekt_result_two_files.xml").toURI()),
-            File(ClassLoader.getSystemResource("detekt_result_single_file.xml").toURI())
+            loadFile("detekt_result_two_files.xml"),
+            loadFile("detekt_result_single_file.xml"),
         )
-        // then
-        Truth.assertThat(context.warnings)
-            .hasSize(8)
+
+        context.warnings shouldHaveSize 8
     }
 
-    @Test
-    fun `should process one file in report`() {
-        // before
+    test("should process one file in report") {
         val context = FakeDangerContext()
         DetektPlugin.context = context
-        // when
-        DetektPlugin.parseAndReport(
-            File(ClassLoader.getSystemResource("detekt_result_single_file.xml").toURI())
-        )
-        // then
-        Truth.assertThat(context.warnings)
-            .hasSize(2)
+
+        DetektPlugin.parseAndReport(loadFile("detekt_result_single_file.xml"))
+
+        context.warnings shouldHaveSize 2
     }
 
-    @Test
-    fun `should process no file in report`() {
-        // before
+    test("should process no file in report") {
         val context = FakeDangerContext()
         DetektPlugin.context = context
-        // when
-        DetektPlugin.parseAndReport(
-            File(ClassLoader.getSystemResource("detekt_result_no_files.xml").toURI())
-        )
-        // then
-        Truth.assertThat(context.warnings)
-            .isEmpty()
+
+        DetektPlugin.parseAndReport(loadFile("detekt_result_no_files.xml"))
+
+        context.warnings.shouldBeEmpty()
     }
 
-    @Test
-    fun `should have relative path in filename`() {
-        // before
+    test("should have relative path in filename") {
         val context = FakeDangerContext()
         DetektPlugin.context = context
-        // when
-        DetektPlugin.parseAndReport(
-            File(ClassLoader.getSystemResource("detekt_result_single_file.xml").toURI())
-        )
-        // then
-        Truth.assertThat(context.warnings.first().file)
-            .isEqualTo("features/recipelist/src/main/java/cz/ackee/sample/recipelist/presentation/RecipeListFragment.kt")
+
+        DetektPlugin.parseAndReport(loadFile("detekt_result_single_file.xml"))
+
+        context.warnings.first().file shouldBe "features/recipelist/src/main/java/cz/ackee/sample/recipelist/presentation/RecipeListFragment.kt"
     }
+})
+
+private fun loadFile(name: String): File {
+    return File(ClassLoader.getSystemResource(name).toURI())
 }
