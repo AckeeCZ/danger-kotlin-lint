@@ -7,6 +7,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 ### Changed
+
+## [1.0.0] - 2026-01-24
+### Changed
 - Breaking change of `DetektPlugin.parseAndReport` to `DetektPlugin.findAndProcessReports`. On top of previous files parsing
-and reporting this method now even finds all Detekt reports. You can now provide an optional config to modify some
-functionality if needed. See documentation for more details.
+  and reporting this method now even finds all Detekt reports. You can now provide an optional config to modify some
+  functionality if needed. See documentation for more details.
