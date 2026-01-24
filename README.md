@@ -26,10 +26,10 @@ register plugin DetektPlugin
 and then you can use it through it's single public method
 
 ```kotlin
-DetektPlugin.parseAndReport(detektReportFile)
+DetektPlugin.findAndProcessReports(DetektPlugin.Config)
 ```
 
-`parseAndReport` method accepts varargs of files pointing to the detekt reports.
+`findAndProcessReports` method accepts an optional config to modify some functionality if needed. See documentation for more details.
 
 Example Dangerfile
 
@@ -49,19 +49,9 @@ import java.util.stream.Collectors
 register plugin DetektPlugin
 
 danger(args) {
-    val detektReports = Files.find(Paths.get(""), 10, BiPredicate { path, attributes ->
-        val fileName = path.toFile().name
-        fileName.endsWith("detekt.xml")
-    }).map { it.toFile() }.collect(Collectors.toList())
-
-    DetektPlugin.parseAndReport(*detektReports.toTypedArray())
+    DetektPlugin.findAndProcessReports(
+        // Optional config
+        DetektPlugin.Config()
+    )
 }
 ```
-
-This will find all files in the depth of 10 relative to current directory that ends with `detekt.xml`
-and it will pass them to the plugin.
-
-## Customization
-
-Currently, there is no customization of reports. It sends inline commit to the git server directly. When some
-customization is needed it will be added.

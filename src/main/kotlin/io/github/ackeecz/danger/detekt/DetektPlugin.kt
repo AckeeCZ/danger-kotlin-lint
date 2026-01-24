@@ -9,6 +9,7 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.FileInputStream
+import java.nio.file.Paths
 
 /**
  * Plugin for a danger-kotlin processing outputs of detekt tool.
@@ -18,12 +19,22 @@ public object DetektPlugin : DangerPlugin() {
     public override val id: String = "danger-kotlin-detekt"
 
     /**
-     * Parse XML output of detekt and report inline comment
-     * to the pull request.
+     * Finds and parses XML outputs of Detekt and reports inline comment to the pull request.
      *
-     * @param reportFiles files representing detekt XML output
+     * @param config Config of report processing
      */
-    public fun parseAndReport(vararg reportFiles: File) {
+    @Suppress("SpreadOperator")
+    public fun findAndProcessReports(config: Config = Config()) {
+        println("Starting find...")
+        val foundFiles = FileFinder.findFiles(
+            rootDirectoryPath = Paths.get(""),
+            config = config.fileDiscovery,
+        )
+        println("Find finished")
+        parseAndReport(*foundFiles.toTypedArray())
+    }
+
+    internal fun parseAndReport(vararg reportFiles: File) {
         val mapper = XmlMapper()
         reportFiles.forEach { file ->
             FileInputStream(file).use { fileInputStream ->
@@ -60,25 +71,47 @@ public object DetektPlugin : DangerPlugin() {
             }
         }
     }
+
+    /**
+     * Config of the [DetektPlugin]
+     *
+     * @param fileDiscovery Config of the file discovery.
+     */
+    public class Config(
+        public val fileDiscovery: FileDiscovery = FileDiscovery(),
+    ) {
+
+        /**
+         * Configuration of Detekt report files discovery
+         *
+         * @param buildFoldersMatcher Allows to configure a matcher for build folders. Default is [BuildFoldersMatcher.All].
+         * @param detektFolderPath Allows to configure a path to the folder that contains Detekt reports. This path
+         * must be relative to the `build` directory.
+         */
+        public class FileDiscovery(
+            public val buildFoldersMatcher: BuildFoldersMatcher = BuildFoldersMatcher.All,
+            public val detektFolderPath: String = "reports/detekt",
+        )
+    }
 }
 
 @JsonRootName(value = "checkstyle")
 @JsonIgnoreProperties(ignoreUnknown = true)
-internal data class DetektReport(
+private data class DetektReport(
     @field:JsonProperty("file")
     @field:JacksonXmlElementWrapper(useWrapping = false)
     val files: List<ReportFile> = emptyList()
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-internal data class ReportFile(
+private data class ReportFile(
     @field:JacksonXmlProperty val name: String = "",
     @field:JsonProperty("error")
     @field:JacksonXmlElementWrapper(useWrapping = false) val errors: List<ReportError> = emptyList()
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-internal data class ReportError(
+private data class ReportError(
     @field:JacksonXmlProperty val line: String = "",
     @field:JacksonXmlProperty val column: String = "",
     @field:JacksonXmlProperty val severity: String = "",
