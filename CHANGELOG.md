@@ -8,6 +8,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 ### Changed
 
+## [1.0.1] - 2026-01-26
+### Fixed
+- Remove debug prints
+
 ## [1.0.0] - 2026-01-24
 ### Changed
 - Breaking change of `DetektPlugin.parseAndReport` to `DetektPlugin.findAndProcessReports`. On top of previous files parsing

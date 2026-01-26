@@ -25,12 +25,10 @@ public object DetektPlugin : DangerPlugin() {
      */
     @Suppress("SpreadOperator")
     public fun findAndProcessReports(config: Config = Config()) {
-        println("Starting find...")
         val foundFiles = FileFinder.findFiles(
             rootDirectoryPath = Paths.get(""),
             config = config.fileDiscovery,
         )
-        println("Find finished")
         parseAndReport(*foundFiles.toTypedArray())
     }
 

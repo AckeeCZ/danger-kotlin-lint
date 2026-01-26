@@ -37,7 +37,7 @@ internal object FileFinder {
                     .orEmpty()
             }.ifEmpty {
                 throw NoFilesFoundException()
-            }.also { println(it) }
+            }
     }
 }
 
