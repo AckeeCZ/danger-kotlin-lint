@@ -6,6 +6,9 @@ import io.kotest.engine.spec.TempFileDeletionException
 import java.io.File
 import kotlin.io.path.createTempDirectory
 
+internal fun loadResourceFile(name: String): File =
+    File(ClassLoader.getSystemResource(name).toURI())
+
 internal val TestConfiguration.rootTempTestDir: File
     get() {
         val projectRootDirectory = File(System.getProperty("user.dir"))

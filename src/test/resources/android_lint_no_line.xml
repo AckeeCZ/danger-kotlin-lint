@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.0">
+    <issue id="InvalidPackage" severity="Fatal" message="Invalid package reference in library; not included in Android: java.nio.file. Referenced from com/example/Foo.class" summary="Package not included in Android" explanation="e">
+        <location file="/some/path/library.jar"/>
+    </issue>
+</issues>
