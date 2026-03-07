@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt
+package io.github.ackeecz.danger.lint
 
 import systems.danger.kotlin.sdk.DangerContext
 import systems.danger.kotlin.sdk.Violation

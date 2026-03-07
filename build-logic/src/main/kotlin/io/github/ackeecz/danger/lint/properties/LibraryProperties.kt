@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt.properties
+package io.github.ackeecz.danger.lint.properties
 
 import org.gradle.api.Project
 import java.io.File

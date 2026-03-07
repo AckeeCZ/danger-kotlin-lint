@@ -1,38 +1,18 @@
-package io.github.ackeecz.danger.detekt
+package io.github.ackeecz.danger.lint.detekt
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
-import systems.danger.kotlin.sdk.DangerPlugin
+import systems.danger.kotlin.sdk.DangerContext
 import tools.jackson.dataformat.xml.XmlMapper
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.FileInputStream
-import java.nio.file.Paths
 
-/**
- * Plugin for a danger-kotlin processing outputs of detekt tool.
- */
-public object DetektPlugin : DangerPlugin() {
+internal class DetektReportProcessor(private val context: DangerContext) {
 
-    public override val id: String = "danger-kotlin-detekt"
-
-    /**
-     * Finds and parses XML outputs of Detekt and reports inline comment to the pull request.
-     *
-     * @param config Config of report processing
-     */
-    @Suppress("SpreadOperator")
-    public fun findAndProcessReports(config: Config = Config()) {
-        val foundFiles = FileFinder.findFiles(
-            rootDirectoryPath = Paths.get(""),
-            config = config.fileDiscovery,
-        )
-        parseAndReport(*foundFiles.toTypedArray())
-    }
-
-    internal fun parseAndReport(vararg reportFiles: File) {
+    fun process(reportFiles: List<File>) {
         val mapper = XmlMapper()
         reportFiles.forEach { file ->
             FileInputStream(file).use { fileInputStream ->
@@ -44,11 +24,11 @@ public object DetektPlugin : DangerPlugin() {
 
     private fun parse(
         mapper: XmlMapper,
-        fileInputStream: FileInputStream
+        fileInputStream: FileInputStream,
     ): DetektReport {
         return mapper.readValue(
             fileInputStream,
-            DetektReport::class.java
+            DetektReport::class.java,
         )
     }
 
@@ -64,32 +44,10 @@ public object DetektPlugin : DangerPlugin() {
                 context.warn(
                     message = message,
                     file = filePath,
-                    line = line
+                    line = line,
                 )
             }
         }
-    }
-
-    /**
-     * Config of the [DetektPlugin]
-     *
-     * @param fileDiscovery Config of the file discovery.
-     */
-    public class Config(
-        public val fileDiscovery: FileDiscovery = FileDiscovery(),
-    ) {
-
-        /**
-         * Configuration of Detekt report files discovery
-         *
-         * @param buildFoldersMatcher Allows to configure a matcher for build folders. Default is [BuildFoldersMatcher.All].
-         * @param detektFolderPath Allows to configure a path to the folder that contains Detekt reports. This path
-         * must be relative to the `build` directory.
-         */
-        public class FileDiscovery(
-            public val buildFoldersMatcher: BuildFoldersMatcher = BuildFoldersMatcher.All,
-            public val detektFolderPath: String = "reports/detekt",
-        )
     }
 }
 
@@ -98,14 +56,14 @@ public object DetektPlugin : DangerPlugin() {
 private data class DetektReport(
     @field:JsonProperty("file")
     @field:JacksonXmlElementWrapper(useWrapping = false)
-    val files: List<ReportFile> = emptyList()
+    val files: List<ReportFile> = emptyList(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 private data class ReportFile(
     @field:JacksonXmlProperty val name: String = "",
     @field:JsonProperty("error")
-    @field:JacksonXmlElementWrapper(useWrapping = false) val errors: List<ReportError> = emptyList()
+    @field:JacksonXmlElementWrapper(useWrapping = false) val errors: List<ReportError> = emptyList(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

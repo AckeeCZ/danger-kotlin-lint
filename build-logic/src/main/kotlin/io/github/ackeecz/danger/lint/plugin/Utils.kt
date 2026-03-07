@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt.plugin
+package io.github.ackeecz.danger.lint.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.PluginManager

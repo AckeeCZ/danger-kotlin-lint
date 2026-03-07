@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt.util
+package io.github.ackeecz.danger.lint.util
 
 import io.kotest.core.TestConfiguration
 import io.kotest.engine.spec.TempDirDeletionException

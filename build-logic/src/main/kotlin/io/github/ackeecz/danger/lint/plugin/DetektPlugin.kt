@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt.plugin
+package io.github.ackeecz.danger.lint.plugin
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin

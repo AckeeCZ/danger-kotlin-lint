@@ -34,5 +34,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 
 # Convention plugins
-ackeecz-danger-detekt-detekt = { id = "ackeecz.danger.detekt.detekt" }
-ackeecz-danger-detekt-publishing = { id = "ackeecz.danger.detekt.publishing" }
+ackeecz-danger-lint-detekt = { id = "ackeecz.danger.lint.detekt" }
+ackeecz-danger-lint-publishing = { id = "ackeecz.danger.lint.publishing" }

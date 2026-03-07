@@ -1,7 +1,7 @@
-package io.github.ackeecz.danger.detekt
+package io.github.ackeecz.danger.lint
 
-import io.github.ackeecz.danger.detekt.util.rootTempTestDir
-import io.github.ackeecz.danger.detekt.util.tempdir
+import io.github.ackeecz.danger.lint.util.rootTempTestDir
+import io.github.ackeecz.danger.lint.util.tempdir
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
@@ -12,6 +12,7 @@ import java.io.File
 import java.nio.file.Paths
 
 private lateinit var underTest: FileFinder
+private const val DEFAULT_REPORT_FOLDER_PATH = "reports/detekt"
 
 internal class FileFinderTest : FunSpec({
 
@@ -33,7 +34,8 @@ internal class FileFinderTest : FunSpec({
         // Act
         val actualFiles = underTest.findFiles(
             rootDirectoryPath = rootTempTestDir.toPath(),
-            config = DetektPlugin.Config.FileDiscovery(),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
         )
 
         // Assert
@@ -53,7 +55,8 @@ internal class FileFinderTest : FunSpec({
         // Act
         val actualFiles = underTest.findFiles(
             rootDirectoryPath = rootTempTestDir.toPath(),
-            config = DetektPlugin.Config.FileDiscovery(detektFolderPath = customDetektDirPath),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = customDetektDirPath,
         )
 
         // Assert
@@ -64,7 +67,8 @@ internal class FileFinderTest : FunSpec({
         shouldThrow<NoFilesFoundException> {
             underTest.findFiles(
                 rootDirectoryPath = tempdir(rootTempTestDir, "detekt").toPath(),
-                config = DetektPlugin.Config.FileDiscovery(),
+                buildFoldersMatcher = BuildFoldersMatcher.All,
+                reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
             )
         }
     }
@@ -74,10 +78,11 @@ internal class FileFinderTest : FunSpec({
             try {
                 underTest.findFiles(
                     rootDirectoryPath = Paths.get(""),
-                    config = DetektPlugin.Config.FileDiscovery(),
+                    buildFoldersMatcher = BuildFoldersMatcher.All,
+                    reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
                 )
             } catch (_: NoFilesFoundException) {
-                // Might be thrown because we check real build folder here and there might be no detek reports
+                // Might be thrown because we check real build folder here and there might be no detekt reports
             }
         }
     }
@@ -93,7 +98,8 @@ internal class FileFinderTest : FunSpec({
         // Act
         val actualFiles = underTest.findFiles(
             rootDirectoryPath = rootTempTestDir.toPath(),
-            config = DetektPlugin.Config.FileDiscovery(),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
         )
 
         // Assert
@@ -108,7 +114,8 @@ internal class FileFinderTest : FunSpec({
 
         val actualFiles = underTest.findFiles(
             rootDirectoryPath = rootTempTestDir.toPath(),
-            config = DetektPlugin.Config.FileDiscovery(),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
         )
 
         actualFiles shouldHaveSize expectedFiles.size
@@ -125,9 +132,8 @@ internal class FileFinderTest : FunSpec({
 
         val actualFiles = underTest.findFiles(
             rootDirectoryPath = rootTempTestDir.toPath(),
-            config = DetektPlugin.Config.FileDiscovery(
-                buildFoldersMatcher = BuildFoldersMatcher.Specific(*expectedBuildDirs.toTypedArray()),
-            ),
+            buildFoldersMatcher = BuildFoldersMatcher.Specific(*expectedBuildDirs.toTypedArray()),
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
         )
 
         actualFiles shouldHaveSize expectedFiles.size
@@ -138,7 +144,7 @@ internal class FileFinderTest : FunSpec({
 private fun TestConfiguration.createDetektDir(
     moduleDirName: String = "app",
     buildDirName: String = "build",
-    detektDirPath: String = "reports/detekt",
+    detektDirPath: String = DEFAULT_REPORT_FOLDER_PATH,
 ): File {
     val moduleDir = File(rootTempTestDir, moduleDirName)
     val buildDir = File(moduleDir, buildDirName)
