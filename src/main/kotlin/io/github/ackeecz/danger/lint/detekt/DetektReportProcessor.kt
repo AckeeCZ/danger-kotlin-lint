@@ -3,6 +3,7 @@ package io.github.ackeecz.danger.lint.detekt
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
+import io.github.ackeecz.danger.lint.PathRelativizer
 import systems.danger.kotlin.sdk.DangerContext
 import tools.jackson.dataformat.xml.XmlMapper
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
@@ -10,7 +11,11 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.FileInputStream
 
-internal class DetektReportProcessor(private val context: DangerContext) {
+internal class DetektReportProcessor(
+    private val context: DangerContext,
+) {
+
+    private val pathRelativizer = PathRelativizer()
 
     fun process(reportFiles: List<File>) {
         val mapper = XmlMapper()
@@ -34,16 +39,12 @@ internal class DetektReportProcessor(private val context: DangerContext) {
 
     private fun report(report: DetektReport) {
         report.files.forEach { file ->
-            val realFile = File(file.name)
             file.errors.forEach { error ->
                 val line = error.line.toIntOrNull() ?: 0
                 val message = "Detekt: ${error.message}, rule: ${error.source}"
-                val filePath = realFile.absolutePath.removePrefix(
-                    "${File("").absolutePath}/"
-                )
                 context.warn(
                     message = message,
-                    file = filePath,
+                    file = pathRelativizer.relativize(file.name),
                     line = line,
                 )
             }

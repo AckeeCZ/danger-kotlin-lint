@@ -1,31 +1,33 @@
 package io.github.ackeecz.danger.lint.detekt
 
 import io.github.ackeecz.danger.lint.FakeDangerContext
+import io.github.ackeecz.danger.lint.util.loadResourceFile
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import java.io.File
+
+private lateinit var context: FakeDangerContext
+private lateinit var underTest: DetektReportProcessor
 
 internal class DetektReportProcessorTest : FunSpec({
 
-    test("should process two files in report") {
-        val context = FakeDangerContext()
-        val underTest = DetektReportProcessor(context)
+    beforeEach {
+        context = FakeDangerContext()
+        underTest = DetektReportProcessor(context)
+    }
 
-        underTest.process(listOf(loadFile("detekt_result_two_files.xml")))
+    test("should process two files in report") {
+        underTest.process(listOf(loadResourceFile("detekt_result_two_files.xml")))
 
         context.warnings shouldHaveSize 6
     }
 
     test("should process two report files") {
-        val context = FakeDangerContext()
-        val underTest = DetektReportProcessor(context)
-
         underTest.process(
             listOf(
-                loadFile("detekt_result_two_files.xml"),
-                loadFile("detekt_result_single_file.xml"),
+                loadResourceFile("detekt_result_two_files.xml"),
+                loadResourceFile("detekt_result_single_file.xml"),
             )
         )
 
@@ -33,33 +35,20 @@ internal class DetektReportProcessorTest : FunSpec({
     }
 
     test("should process one file in report") {
-        val context = FakeDangerContext()
-        val underTest = DetektReportProcessor(context)
-
-        underTest.process(listOf(loadFile("detekt_result_single_file.xml")))
+        underTest.process(listOf(loadResourceFile("detekt_result_single_file.xml")))
 
         context.warnings shouldHaveSize 2
     }
 
     test("should process no file in report") {
-        val context = FakeDangerContext()
-        val underTest = DetektReportProcessor(context)
-
-        underTest.process(listOf(loadFile("detekt_result_no_files.xml")))
+        underTest.process(listOf(loadResourceFile("detekt_result_no_files.xml")))
 
         context.warnings.shouldBeEmpty()
     }
 
     test("should have relative path in filename") {
-        val context = FakeDangerContext()
-        val underTest = DetektReportProcessor(context)
-
-        underTest.process(listOf(loadFile("detekt_result_single_file.xml")))
+        underTest.process(listOf(loadResourceFile("detekt_result_single_file.xml")))
 
         context.warnings.first().file shouldBe "features/recipelist/src/main/java/cz/ackee/sample/recipelist/presentation/RecipeListFragment.kt"
     }
 })
-
-private fun loadFile(name: String): File {
-    return File(ClassLoader.getSystemResource(name).toURI())
-}

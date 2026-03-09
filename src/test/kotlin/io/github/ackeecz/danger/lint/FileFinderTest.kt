@@ -122,6 +122,48 @@ internal class FileFinderTest : FunSpec({
         actualFiles.shouldContainExactlyInAnyOrder(expectedFiles)
     }
 
+    test("filter files by prefix when filePrefix is provided") {
+        // Arrange
+        val detektDir = createDetektDir()
+        val expectedFiles = listOf(
+            File(detektDir, "lint-results-debug.xml").also { it.createNewFile() },
+            File(detektDir, "lint-results-release.xml").also { it.createNewFile() },
+        )
+        File(detektDir, "other-report.xml").also { it.createNewFile() }
+
+        // Act
+        val actualFiles = underTest.findFiles(
+            rootDirectoryPath = rootTempTestDir.toPath(),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
+            filePrefix = "lint-results-",
+        )
+
+        // Assert
+        actualFiles.shouldContainExactlyInAnyOrder(expectedFiles)
+    }
+
+    test("filter files by extension when fileExtension is provided") {
+        // Arrange
+        val detektDir = createDetektDir()
+        val expectedFiles = listOf(
+            File(detektDir, "lint-results-debug.html").also { it.createNewFile() },
+        )
+        File(detektDir, "lint-results-debug.xml").also { it.createNewFile() }
+
+        // Act
+        val actualFiles = underTest.findFiles(
+            rootDirectoryPath = rootTempTestDir.toPath(),
+            buildFoldersMatcher = BuildFoldersMatcher.All,
+            reportFilesFolderPath = DEFAULT_REPORT_FOLDER_PATH,
+            filePrefix = "lint-results-",
+            fileExtension = "html",
+        )
+
+        // Assert
+        actualFiles.shouldContainExactlyInAnyOrder(expectedFiles)
+    }
+
     test("search in specific build folders if configured") {
         val expectedModules = listOf("module1", "module2")
         val expectedBuildDirs = expectedModules.map { "$it/build" }

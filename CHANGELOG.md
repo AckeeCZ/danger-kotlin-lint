@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Android Lint report support via `LintPlugin.findAndProcessAndroidLintReports(AndroidLintConfig)`
+  — parses Android Lint XML reports and posts inline warnings per issue, plus Markdown links
+  to HTML reports via GitLab CI artifacts for modules with issues
+
 ### Changed
 - Renamed artifact from `danger-kotlin-detekt` to `danger-kotlin-lint` (`io.github.ackeecz:danger-kotlin-lint`)
 - Renamed `DetektPlugin` to `LintPlugin` as the public entry point (`io.github.ackeecz.danger.lint.LintPlugin`)
