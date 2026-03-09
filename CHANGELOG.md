@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0] - 2026-03-09
 ### Added
 - Android Lint report support via `LintPlugin.findAndProcessAndroidLintReports(AndroidLintConfig)`
   — parses Android Lint XML reports and posts inline warnings per issue, plus Markdown links
