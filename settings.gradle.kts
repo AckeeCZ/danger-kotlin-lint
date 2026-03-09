@@ -15,6 +15,6 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "danger-kotlin-detekt"
+rootProject.name = "danger-kotlin-lint"
 
 includeBuild("build-logic")

@@ -1,7 +1,7 @@
-package io.github.ackeecz.danger.detekt.plugin
+package io.github.ackeecz.danger.lint.plugin
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
-import io.github.ackeecz.danger.detekt.properties.LibraryProperties
+import io.github.ackeecz.danger.lint.properties.LibraryProperties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

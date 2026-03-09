@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 ### Changed
+- Renamed artifact from `danger-kotlin-detekt` to `danger-kotlin-lint` (`io.github.ackeecz:danger-kotlin-lint`)
+- Renamed `DetektPlugin` to `LintPlugin` as the public entry point (`io.github.ackeecz.danger.lint.LintPlugin`)
+- Renamed `DetektPlugin.findAndProcessReports` to `LintPlugin.findAndProcessDetektReports`
+- Moved `BuildFoldersMatcher` to `io.github.ackeecz.danger.lint` package
+- Extracted `DetektConfig` to `io.github.ackeecz.danger.lint.detekt.DetektConfig` (replaces `DetektPlugin.Config`)
 
 ## [1.0.1] - 2026-01-26
 ### Fixed

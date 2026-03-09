@@ -1,4 +1,4 @@
-package io.github.ackeecz.danger.detekt
+package io.github.ackeecz.danger.lint
 
 import java.io.File
 import java.nio.file.Files
@@ -12,9 +12,10 @@ internal object FileFinder {
 
     fun findFiles(
         rootDirectoryPath: Path,
-        config: DetektPlugin.Config.FileDiscovery,
+        buildFoldersMatcher: BuildFoldersMatcher,
+        reportFilesFolderPath: String,
     ): List<File> {
-        val buildDirs = when (val matcher = config.buildFoldersMatcher) {
+        val buildDirs = when (buildFoldersMatcher) {
             is BuildFoldersMatcher.All -> {
                 val maxDepth = 6
                 Files.find(
@@ -26,12 +27,12 @@ internal object FileFinder {
                 ).map { it.toFile() }.toList()
             }
             is BuildFoldersMatcher.Specific -> {
-                matcher.paths.map { File(rootDirectoryPath.toFile(), it) }
+                buildFoldersMatcher.paths.map { File(rootDirectoryPath.toFile(), it) }
             }
         }
         return buildDirs
             .flatMap { buildDir ->
-                File(buildDir, config.detektFolderPath)
+                File(buildDir, reportFilesFolderPath)
                     .listFiles()
                     ?.filter { it.extension == REPORT_FILE_EXTENSION }
                     .orEmpty()
@@ -40,5 +41,3 @@ internal object FileFinder {
             }
     }
 }
-
-internal class NoFilesFoundException : IllegalStateException("No Detekt report files found. Check your FileDiscovery configuration.")

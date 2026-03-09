@@ -1,7 +1,7 @@
-package io.github.ackeecz.danger.detekt
+package io.github.ackeecz.danger.lint
 
 /**
- * Matcher for build folders used during Detekt report file discovery
+ * Matcher for build folders used during lint report file discovery
  */
 public sealed interface BuildFoldersMatcher {
 

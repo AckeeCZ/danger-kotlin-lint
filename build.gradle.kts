@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.mavenPublish)
 
-    alias(libs.plugins.ackeecz.danger.detekt.detekt)
-    alias(libs.plugins.ackeecz.danger.detekt.publishing)
+    alias(libs.plugins.ackeecz.danger.lint.detekt)
+    alias(libs.plugins.ackeecz.danger.lint.publishing)
 }
 
 tasks.test {

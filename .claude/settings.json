@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew build *)",
+      "Bash(./gradlew detektMain *)",
+      "Bash(./gradlew publishToMavenLocal *)",
+      "Bash(./gradlew test *)",
+      "Bash(cat *)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(find *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git rebase *)",
+      "Bash(git -C * rebase *)",
+      "Bash(git rev-parse *)",
+      "Bash(git status *)",
+      "Bash(git worktree *)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(pwd *)"
+    ],
+    "deny": [
+      "Bash(git push *)"
+    ],
+    "defaultMode": "plan"
+  },
+  "enabledPlugins": {
+    "kotlin-lsp@claude-plugins-official": true
+  },
+  "plansDirectory": "./.claude/plans",
+  "outputStyle": "Explanatory"
+}

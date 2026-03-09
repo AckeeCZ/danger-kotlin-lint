@@ -19,11 +19,11 @@ dependencies {
 gradlePlugin {
     plugins {
         plugin(
-            dependency = libs.plugins.ackeecz.danger.detekt.detekt,
+            dependency = libs.plugins.ackeecz.danger.lint.detekt,
             pluginClassSimpleName = "DetektPlugin",
         )
         plugin(
-            dependency = libs.plugins.ackeecz.danger.detekt.publishing,
+            dependency = libs.plugins.ackeecz.danger.lint.publishing,
             pluginClassSimpleName = "PublishingPlugin",
         )
     }
@@ -36,6 +36,6 @@ private fun NamedDomainObjectContainer<PluginDeclaration>.plugin(
     val pluginId = dependency.get().pluginId
     register(pluginId) {
         id = pluginId
-        implementationClass = "io.github.ackeecz.danger.detekt.plugin.$pluginClassSimpleName"
+        implementationClass = "io.github.ackeecz.danger.lint.plugin.$pluginClassSimpleName"
     }
 }

@@ -40,3 +40,6 @@ hs_err_pid*
 /.idea/
 local.properties
 .DS_Store
+
+# Claude
+.claude/plans
